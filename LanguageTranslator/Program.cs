@@ -3,10 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Reflection;
     using System.IO;
     using System.Linq;
     using System.Net;
     using System.Text;
+    using System.Text.RegularExpressions;
 
     using EloBuddy;
     using EloBuddy.Sandbox;
@@ -15,6 +17,7 @@
     using EloBuddy.SDK.Menu.Values;
 
     using Newtonsoft.Json;
+    using Version = System.Version;
 
     internal enum Language
     {
@@ -77,7 +80,9 @@
                             {
                                 Translations = jsonConvert;
                             }
-                            DownloadNewJson();
+                            var webClient = new WebClient();
+                            webClient.DownloadStringCompleted += VersionCompleted;
+                            webClient.DownloadStringAsync(new Uri(VersionUrl, UriKind.Absolute));
                         }
                     }
                     if (_ready)
@@ -90,7 +95,7 @@
 
         private static void DownloadNewJson()
         {
-            var webClient = new WebClient { Encoding = Encoding.UTF8 };
+            var webClient = new WebClient();
             webClient.DownloadStringCompleted += JsonDownloaded;
             webClient.DownloadStringAsync(new Uri(JsonUrl, UriKind.Absolute));
         }
@@ -113,6 +118,27 @@
                 Translations = jsonConvert;
             }
             _ready = true;
+        }
+
+        private static void VersionCompleted(object sender, DownloadStringCompletedEventArgs args)
+        {
+            if (args.Cancelled || args.Error != null)
+            {
+                Console.WriteLine("Failed to download internet version.");
+                _ready = true;
+                return;
+            }
+            var match = Regex.Match(args.Result, VersionRegex);
+            var internetVersion = Version.Parse(match.Groups[1].Value);
+            var localVersion = Assembly.GetExecutingAssembly().GetName().Version;
+            if (internetVersion > localVersion)
+            {
+                DownloadNewJson();
+            }
+            else
+            {
+                _ready = true;
+            }
         }
 
         private static void OnLoad()
