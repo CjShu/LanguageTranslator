@@ -60,7 +60,9 @@
       "12": "Draw notifications about selected target",
       "13": "Only Attack Selected Target Settings",
       "14": "Enable only attack selected target",
-      "15": "Only attack selected target toggle"
+      "15": "Only attack selected target toggle",
+      "16": "Key 1",
+      "17": "Key 2"
     },
     "ChineseTraditional": {
       "0": "目標選擇器",
@@ -78,7 +80,9 @@
       "12": "顯示通知目標",
       "13": "只攻擊選擇目標設置",
       "14": "啟用只攻擊選定目標",
-      "15": "只有進攻選擇目標切換"
+      "15": "只有進攻選擇目標切換",
+      "16": "鍵盤按鍵 1",
+      "17": "鍵盤按鍵 2"
     }
   },
   "Orbwalker": {
@@ -130,7 +134,10 @@
       "44": "Support Mode",
       "45": "Don't attack Yasuo's WindWall",
       "46": "Attack Jungle Plants",
-      "47": "Last Hit Gangplank Barrels"
+      "47": "Last Hit Gangplank Barrels",
+      "48": "Key 1",
+      "49": "Key 2",
+      "50": "Spacebar"
     },
     "ChineseTraditional": {
       "0": "走砍",
@@ -180,7 +187,10 @@
       "44": "Support 模式",
       "45": "不要攻擊犽宿風牆",
       "46": "攻擊 野區 植物",
-      "47": "使用尾刀攻擊 剛普桶子"
+      "47": "使用尾刀攻擊 剛普桶子",
+      "48": "鍵盤按鍵 1",
+      "49": "鍵盤按鍵 2",
+      "50": "空白按鍵"
     }
   },
   "Prediction": {
