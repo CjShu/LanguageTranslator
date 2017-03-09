@@ -128,7 +128,9 @@
       "42": "Use Game.OnTick (more fps)",
       "43": "Update Game.OnUpdate (faster reaction)",
       "44": "Support Mode",
-      "45": "Don't attack Yasuo's WindWall"
+      "45": "Don't attack Yasuo's WindWall",
+      "46": "Attack Jungle Plants",
+      "47": "Last Hit Gangplank Barrels"
     },
     "ChineseTraditional": {
       "0": "走砍",
@@ -176,7 +178,9 @@
       "42": "使用Game.OnTick (更多FPS)",
       "43": "使用Game.OnUpdate (反應更快)",
       "44": "Support 模式",
-      "45": "不要攻擊犽宿風牆"
+      "45": "不要攻擊犽宿風牆",
+      "46": "攻擊 野區 植物",
+      "47": "使用尾刀攻擊 剛普桶子"
     }
   },
   "Prediction": {
