@@ -19,28 +19,27 @@
     using Newtonsoft.Json;
     using Version = System.Version;
 
-    internal enum Language
+    public enum Language
     {
         English,
-        ChineseSimplified,
         ChineseTraditional,
     }
 
     public static class Program
     {
-        private static Menu menu; 
+        private static Menu _menu;
         private const string VersionUrl = "https://raw.githubusercontent.com/CjShu/LanguageTranslator/master/LanguageTranslator/Properties/AssemblyInfo.cs";
         private const string JsonUrl = "https://raw.githubusercontent.com/CjShu/LanguageTranslator/master/LanguageTranslator/Translations.json";
         private const string VersionRegex = @"\[assembly\: AssemblyVersion\(""(\d+\.\d+\.\d+\.\d+)""\)\]";
         private static string _jsonPath, _programDirectory;
-        private static bool _jsonPathExists, _loaded, _ready;
+        private static bool _loaded, _ready;
+        private static bool _jsonPathExists;
         private static Dictionary<string, Dictionary<Language, Dictionary<int, string>>> Translations = new Dictionary<string, Dictionary<Language, Dictionary<int, string>>>();
 
         private static readonly Dictionary<string, Language> CulturesToLanguage = new Dictionary<string, Language>
         {
             { "en-US", Language.English },
             { "en-GB", Language.English },
-            { "zh-CHS", Language.ChineseSimplified },
             { "zh-CHT", Language.ChineseTraditional }
         };
 
@@ -64,10 +63,8 @@
                         {
                             Directory.CreateDirectory(_programDirectory);
                         }
-
                         _jsonPath = Path.Combine(_programDirectory, "Translations.json");
                         _jsonPathExists = File.Exists(_jsonPath);
-
                         if (!_jsonPathExists)
                         {
                             File.Create(_jsonPath).Close();
@@ -80,9 +77,10 @@
                             {
                                 Translations = jsonConvert;
                             }
-                            var webClient = new WebClient();
-                            webClient.DownloadStringCompleted += VersionCompleted;
-                            webClient.DownloadStringAsync(new Uri(VersionUrl, UriKind.Absolute));
+                            DownloadNewJson();
+                            //var webClient = new WebClient { Encoding = Encoding.UTF8 };
+                            //webClient.DownloadStringCompleted += VersionCompleted;
+                            //webClient.DownloadStringAsync(new Uri(VersionUrl, UriKind.Absolute));
                         }
                     }
                     if (_ready)
@@ -93,9 +91,30 @@
             };
         }
 
+        private static void VersionCompleted(object sender, DownloadStringCompletedEventArgs args)
+        {
+            if (args.Cancelled || args.Error != null)
+            {
+                Console.WriteLine("Failed to download internet version.");
+                _ready = true;
+                return;
+            }
+            var match = Regex.Match(args.Result, VersionRegex);
+            var internetVersion = Version.Parse(match.Groups[1].Value);
+            var localVersion = Assembly.GetExecutingAssembly().GetName().Version;
+            if (internetVersion > localVersion)
+            {
+                DownloadNewJson();
+            }
+            else
+            {
+                _ready = true;
+            }
+        }
+
         private static void DownloadNewJson()
         {
-            var webClient = new WebClient();
+            var webClient = new WebClient { Encoding = Encoding.UTF8 };
             webClient.DownloadStringCompleted += JsonDownloaded;
             webClient.DownloadStringAsync(new Uri(JsonUrl, UriKind.Absolute));
         }
@@ -120,39 +139,18 @@
             _ready = true;
         }
 
-        private static void VersionCompleted(object sender, DownloadStringCompletedEventArgs args)
-        {
-            if (args.Cancelled || args.Error != null)
-            {
-                Console.WriteLine("Failed to download internet version.");
-                _ready = true;
-                return;
-            }
-            var match = Regex.Match(args.Result, VersionRegex);
-            var internetVersion = Version.Parse(match.Groups[1].Value);
-            var localVersion = Assembly.GetExecutingAssembly().GetName().Version;
-            if (internetVersion > localVersion)
-            {
-                DownloadNewJson();
-            }
-            else
-            {
-                _ready = true;
-            }
-        }
-
         private static void OnLoad()
         {
             if (!_loaded)
             {
                 _ready = false;
                 _loaded = true;
-                menu = MainMenu.AddMenu("LanguageTranslator", "LanguageTranslator");
+                _menu = MainMenu.AddMenu("LanguageTranslator", "LanguageTranslator");
                 var languagesAvailable = Enum.GetValues(typeof(Language)).Cast<Language>().ToArray().Select(i => i.ToString());
                 var currentLanguage = (int)CurrentCulture;
-                var comboBox = menu.Add("Language", new ComboBox("Language:", languagesAvailable, currentLanguage));
+                var comboBox = _menu.Add("Language", new ComboBox("Language:", languagesAvailable, currentLanguage));
                 comboBox.OnValueChange += delegate (ValueBase<int> sender, ValueBase<int>.ValueChangeArgs args) { Translate((Language)args.OldValue, (Language)args.NewValue); };
-                var saveCheckBox = menu.Add("Save", new CheckBox("Save Current Addons Names", false));
+                var saveCheckBox = _menu.Add("Save", new CheckBox("Save Current Addons Names", false));
                 saveCheckBox.OnValueChange += delegate (ValueBase<bool> sender, ValueBase<bool>.ValueChangeArgs args)
                 {
                     if (sender.CurrentValue)
@@ -249,7 +247,7 @@
 
         private static void Save()
         {
-            Translate((Language)menu["Language"].Cast<ComboBox>().CurrentValue, Language.English);
+            Translate((Language)_menu["Language"].Cast<ComboBox>().CurrentValue, Language.English);
             foreach (var pair in MainMenu.MenuInstances)
             {
                 foreach (var menu in pair.Value)
