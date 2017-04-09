@@ -1597,7 +1597,10 @@
       "49": "Udyr E",
       "50": "Zilean E",
       "51": "Aatrox Q",
-      "52": "Akali R"
+      "52": "Akali R",
+      "53": "Walking",
+      "54": "Flash",
+      "55": "Zhonyas"
     },
     "ChineseTraditional": {
       "0": "Evade#閃避L#",
@@ -1651,7 +1654,10 @@
       "49": "烏迪爾 E",
       "50": "極靈 E",
       "51": "厄薩斯 Q",
-      "52": "阿卡莉 R"
+      "52": "阿卡莉 R",
+      "53": "步行",
+      "54": "閃現",
+      "55": "中啞沙漏"
     }
   },
   "Universal GankAlerter": {
