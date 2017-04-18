@@ -40,7 +40,9 @@
       "14": "點擊延遲",
       "15": "更低的數值代表點擊更快.",
       "16": "最小延遲 (默認 150)",
-      "17": "最大延遲 (默認 350)"
+      "17": "最大延遲 (默認 350)",
+      "18": "反突進設定",
+      "19": "技能檢測設置:"
     }
   },
   "Target Selector": {
@@ -62,7 +64,10 @@
       "14": "Enable only attack selected target",
       "15": "Only attack selected target toggle",
       "16": "Key 1",
-      "17": "Key 2"
+      "17": "Key 2",
+      "18": "Priorities",
+      "19": "(Higher value means higher priority)",
+      "20": "Reset to default priorities"
     },
     "ChineseTraditional": {
       "0": "目標選擇器",
@@ -82,7 +87,10 @@
       "14": "啟用只攻擊選定目標",
       "15": "只有進攻選擇目標切換",
       "16": "鍵盤按鍵 1",
-      "17": "鍵盤按鍵 2"
+      "17": "鍵盤按鍵 2",
+      "18": "優先目標",
+      "19": "(數字高為優先)",
+      "20": "重置預設優先級"
     }
   },
   "Orbwalker": {
